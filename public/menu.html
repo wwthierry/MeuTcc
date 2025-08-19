@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MelhorEtec</title>
+    <link rel="stylesheet" href="assets/style/css/menu.css">
+    <link rel="stylesheet" href="assets/style/css/nav.css">
+</head>
+<body>
+        <div class="container">
+          <header class="header">
+            <h1>📸 Galeria Social</h1>
+            <p>Veja as últimas fotos publicadas!</p>
+          </header>
+          <section class="posts-section">
+            <div id="postsContainer">
+              <div class="loading">Carregando publicações...</div>
+            </div>
+          </section>
+        </div>
+        <script>
+          // Gerar um ID único para o usuário (simula autenticação)
+          const userId = localStorage.getItem('userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('userId', userId);
+      
+          const postsContainer = document.getElementById('postsContainer');
+      
+          document.addEventListener('DOMContentLoaded', () => {
+            loadPosts();
+          });
+      
+          async function loadPosts() {
+            try {
+              const response = await fetch('/api/posts');
+              if (!response.ok) throw new Error('Erro ao carregar posts');
+              const posts = await response.json();
+      
+              if (posts.length === 0) {
+                postsContainer.innerHTML = '<div class="empty-state">Nenhuma publicação ainda. Seja o primeiro a compartilhar! 📷</div>';
+                return;
+              }
+              postsContainer.innerHTML = '';
+              for (const post of posts) {
+                const postElement = await createPostElement(post);
+                postsContainer.appendChild(postElement);
+              }
+            } catch (error) {
+              console.error('Erro ao carregar posts:', error);
+              postsContainer.innerHTML = '<div class="empty-state">Erro ao carregar publicações 😞</div>';
+            }
+          }
+      
+          async function createPostElement(post) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.dataset.postId = post.id;
+      
+            const likeStatus = await checkLikeStatus(post.id);
+            const comments = await loadComments(post.id);
+      
+            const postDate = new Date(post.createdAt).toLocaleDateString('pt-BR', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+      
+            postDiv.innerHTML = `
+              <div class="post-header">
+                <div class="post-title">${escapeHtml(post.title)}</div>
+                <div class="post-meta">Por ${escapeHtml(post.author)} • ${postDate}</div>
+              </div>
+              <img src="${post.imageUrl}" alt="${escapeHtml(post.title)}" class="post-image" loading="lazy">
+              <div class="post-content">
+                ${post.description ? `<div class="post-description">${escapeHtml(post.description)}</div>` : ''}
+              </div>
+              <div class="post-actions">
+                <button class="action-btn ${likeStatus.liked ? 'liked' : ''}" onclick="toggleLike(${post.id}, this)">
+                  ${likeStatus.liked ? '❤️' : '🤍'} <span class="like-count">${likeStatus.likesCount}</span>
+                </button>
+                <button class="action-btn" onclick="toggleComments(${post.id})">
+                  💬 <span class="comment-count">${comments.length}</span>
+                </button>
+              </div>
+              <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                <div class="comments-list" id="comments-list-${post.id}">
+                  ${comments.map(comment => `
+                    <div class="comment">
+                      <div class="comment-header">${escapeHtml(comment.author)} • ${new Date(comment.createdAt).toLocaleDateString('pt-BR')}</div>
+                      <div class="comment-text">${escapeHtml(comment.text)}</div>
+                    </div>
+                  `).join('')}
+                </div>
+                <form class="comment-form" onsubmit="addComment(event, ${post.id})">
+                  <input type="text" class="comment-input" placeholder="Escreva um comentário..." required>
+                  <button type="submit" class="comment-btn">Enviar</button>
+                </form>
+              </div>
+            `;
+            return postDiv;
+          }
+      
+          async function checkLikeStatus(postId) {
+            try {
+              const response = await fetch(`/api/posts/${postId}/like/${userId}`);
+              return await response.json();
+            } catch (error) {
+              console.error('Erro ao verificar curtida:', error);
+              return { liked: false, likesCount: 0 };
+            }
+          }
+      
+          async function loadComments(postId) {
+            try {
+              const response = await fetch(`/api/posts/${postId}/comments`);
+              return await response.json();
+            } catch (error) {
+              console.error('Erro ao carregar comentários:', error);
+              return [];
+            }
+          }
+      
+          window.toggleLike = async function(postId, button) {
+            try {
+              const response = await fetch(`/api/posts/${postId}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
+              });
+      
+              if (!response.ok) throw new Error('Erro ao curtir post');
+              const result = await response.json();
+              button.innerHTML = `${result.liked ? '❤️' : '🤍'} <span class="like-count">${result.likesCount}</span>`;
+              button.className = `action-btn ${result.liked ? 'liked' : ''}`;
+            } catch (error) {
+              console.error('Erro ao curtir:', error);
+              alert('Erro ao curtir post');
+            }
+          }
+      
+          window.toggleComments = function(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+          }
+      
+          window.addComment = async function(event, postId) {
+            event.preventDefault();
+            const form = event.target;
+            const input = form.querySelector('.comment-input');
+            const text = input.value.trim();
+            if (!text) return;
+            try {
+              const response = await fetch(`/api/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text,
+                  author: 'Anônimo'
+                })
+              });
+              if (!response.ok) throw new Error('Erro ao adicionar comentário');
+              const comment = await response.json();
+              const commentsList = document.getElementById(`comments-list-${postId}`);
+              const commentDiv = document.createElement('div');
+              commentDiv.className = 'comment';
+              commentDiv.innerHTML = `
+                <div class="comment-header">${escapeHtml(comment.author)} • ${new Date(comment.createdAt).toLocaleDateString('pt-BR')}</div>
+                <div class="comment-text">${escapeHtml(comment.text)}</div>
+              `;
+              commentsList.appendChild(commentDiv);
+              // Atualizar contador
+              const commentCount = form.closest('.post').querySelector('.comment-count');
+              commentCount.textContent = parseInt(commentCount.textContent) + 1;
+              input.value = '';
+            } catch (error) {
+              console.error('Erro ao adicionar comentário:', error);
+              alert('Erro ao adicionar comentário');
+            }
+          }
+      
+          function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+          }
+        </script>
+    <script src="assets/style/js/nav.js"></script>
+</body>
+</html>

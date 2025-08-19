@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Galeria Social</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; }
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: linear-gradient(180deg, #000000 0%, #0a0a1f 100%);
+      min-height: 100vh;
+      color: #e5e7eb;
+      font-family: system-ui, sans-serif;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 8px 60px 8px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      color: #FFF;
+      margin-bottom: 8px;
+      text-shadow: 0 4px 12px #0004;
+      font-weight: 700;
+    }
+    .header p {
+      color: #9ca3af;
+      font-size: 1.09rem;
+      font-weight: 400;
+      opacity: 0.85;
+    }
+    .upload-section {
+      background: rgba(24, 24, 40, 0.97);
+      border-radius: 16px;
+      padding: 32px 18px 28px 18px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+      border: 1px solid #272743;
+    }
+    form#postForm {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    label.upload {
+      width: 12rem;
+      height: 12rem;
+      background-color: rgba(107, 114, 128, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 1rem;
+      flex-shrink: 0;
+      border: 2.5px dashed #3b3b48;
+      margin-bottom: 0;
+      transition: border-color 0.18s;
+    }
+    label.upload img {
+      margin-bottom: 0.5rem;
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      opacity: 0.8;
+    }
+    label.upload span {
+      color: #9ca3af;
+      font-size: 0.98rem;
+      user-select: none;
+    }
+    label.upload:hover, label.upload:focus {
+      border-color: #7c3aed;
+      background: rgba(107,114,128,0.78);
+    }
+    input[type="file"] { display: none; }
+    .inputs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 19rem;
+      min-width: 16rem;
+      max-width: 21rem;
+    }
+    .inputs-container input[type="text"],
+    .inputs-container textarea {
+      background-color: rgba(107, 114, 128, 0.6);
+      color: #e5e7eb;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 0;
+      transition: background .18s;
+    }
+    .inputs-container input[type="text"]:focus,
+    .inputs-container textarea:focus {
+      background-color: rgba(107, 114, 128, 0.75);
+    }
+    .inputs-container textarea {
+      resize: none;
+      height: 5.5rem;
+    }
+    .inputs-container input[type="text"]::placeholder,
+    .inputs-container textarea::placeholder {
+      color: #bdbdbd;
+      opacity: 0.98;
+    }
+    .inputs-container input[type="text"] { height: 2.5rem; }
+    .inputs-container .author {
+      height: 2.3rem;
+      font-size: 0.99rem;
+      margin-bottom: 0.18rem;
+      color: #bdbdbd;
+    }
+    .inputs-container button {
+      align-self: flex-start;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.28rem 1.15rem;
+      font-size: 1.09rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      font-weight: 600;
+      box-shadow: 0 2px 10px #0002;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .inputs-container button:active {
+      background: #eee;
+      color: #444;
+      transform: scale(0.99);
+    }
+    .inputs-container button:disabled {
+      background: #bbb;
+      color: #fff;
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .posts-section {
+      margin: 0 auto;
+      margin-top: 35px;
+      max-width: 900px;
+    }
+    .loading, .empty-state {
+      text-align: center;
+      color: #bdbdbd;
+      font-size: 1.15rem;
+      margin: 42px 0;
+      opacity: 0.89;
+    }
+    .post {
+      background: rgba(28, 28, 50, 0.98);
+      border-radius: 1.23rem;
+      margin-bottom: 2.2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border: 1px solid #23233a;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .post:hover {
+      box-shadow: 0 14px 40px #0006;
+      transform: translateY(-2px) scale(1.01);
+    }
+    .post-header {
+      padding: 21px 20px 10px 20px;
+      border-bottom: 1.5px solid #222239;
+    }
+    .post-title {
+      font-size: 1.21rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 3.5px;
+    }
+    .post-meta {
+      color: #bdbdbd;
+      font-size: 0.93rem;
+      letter-spacing: 0.01em;
+    }
+    .post-image {
+      width: 100%;
+      max-height: 380px;
+      object-fit: cover;
+      display: block;
+      background: #181826;
+    }
+    .post-content {
+      padding: 18px 20px 12px 20px;
+    }
+    .post-description {
+      color: #bdbdbd;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-size: 1.08rem;
+    }
+    .post-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      padding: 12px 20px;
+      background: #1a1a28;
+      border-top: 1.5px solid #222239;
+    }
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: background-color 0.15s;
+      font-size: 15px;
+      font-weight: 500;
+      color: #9ca3af;
+    }
+    .action-btn:hover {
+      background: #232344;
+      color: #a78bfa;
+    }
+    .action-btn.liked {
+      color: #e53e3e;
+      background: #2d1e21;
+    }
+    .comments-section {
+      padding: 18px 20px 10px 20px;
+      border-top: 1.5px solid #23233a;
+      background: #181826;
+    }
+    .comment {
+      background: #222239;
+      padding: 13px 15px;
+      border-radius: 10px;
+      margin-bottom: 9px;
+      color: #e5e7eb;
+      box-shadow: 0 2px 8px #0002;
+    }
+    .comment-header {
+      font-weight: 600;
+      color: #a78bfa;
+      margin-bottom: 3px;
+      font-size: 0.93rem;
+    }
+    .comment-text {
+      color: #e5e7eb;
+      line-height: 1.54;
+    }
+    .comment-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 11px;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 8px 14px;
+      border: 1px solid #23233a;
+      border-radius: 20px;
+      background: #21213b;
+      color: #bdbdbd;
+      font-size: 1.02rem;
+      outline: none;
+    }
+    .comment-input::placeholder {
+      color: #656574;
+      opacity: 0.88;
+    }
+    .comment-btn {
+      background: #a78bfa;
+      color: #181826;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.98rem;
+      transition: background 0.13s;
+    }
+    .comment-btn:hover { background: #7c3aed; color: #fff;}
+    @media (max-width: 480px) {
+      .container { padding: 8px 0 40px 0; }
+      form#postForm {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+      }
+      .inputs-container {
+        width: 100%;
+        max-width: 18rem;
+      }
+      label.upload {
+        width: 11.5rem;
+        height: 11.5rem;
+        margin-bottom: 1rem;
+      }
+      .inputs-container button { align-self: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>📸 Galeria Social</h1>
+      <p>Compartilhe suas melhores fotos e conecte-se com outros</p>
+    </header>
+    <section class="upload-section">
+      <form id="postForm" autocomplete="off">
+        <label class="upload" for="imageFile">
+          <img id="previewImg" alt="Ícone de várias imagens empilhadas representando carregar fotos" src="https://placehold.co/64x64/png?text=Image+Icon"/>
+          <span>Carregar foto</span>
+          <input id="imageFile" name="imageFile" type="file" accept="image/*" required>
+        </label>
+        <div class="inputs-container">
+          <input type="text" id="postTitle" required placeholder="Título da Foto *"/>
+          <textarea id="postDescription" placeholder="Conte a história por trás dessa foto..."></textarea>
+          <input type="text" id="authorName" class="author" placeholder="Seu nome ou apelido"/>
+          <button type="submit" class="btn" id="submitBtn">
+            Publicar <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+    </section>
+    <section class="posts-section">
+      <div id="postsContainer">
+        <div class="loading">Carregando publicações...</div>
+      </div>
+    </section>
+  </div>
+  <script>
+    // Gerar um ID único para o usuário (simula autenticação)
+    const userId = localStorage.getItem('userId') || 'user_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('userId', userId);
+
+    const postForm = document.getElementById('postForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const previewImg = document.getElementById('previewImg');
+    const imageFileInput = document.getElementById('imageFile');
+
+    imageFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      previewImg.src = file ? URL.createObjectURL(file) : "https://placehold.co/64x64/png?text=Image+Icon";
+    });
+
+    postForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await createPost();
+    });
+
+    async function createPost() {
+      const title = document.getElementById('postTitle').value;
+      const description = document.getElementById('postDescription').value;
+      const author = document.getElementById('authorName').value;
+      const imageFile = imageFileInput.files[0];
+
+      if (!title || !imageFile) {
+        alert('Título e imagem são obrigatórios!');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Enviando... <i class="fas fa-spinner fa-spin"></i>';
+
+      try {
+        // 1. Upload da imagem
+        const timestamp = Date.now();
+        const filename = `${timestamp}_${imageFile.name}`;
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'x-vercel-filename': filename },
+          body: imageFile
+        });
+
+        if (!uploadResponse.ok) throw new Error('Erro no upload da imagem');
+        const uploadResult = await uploadResponse.json();
+
+        // 2. Criar o post
+        const postResponse = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title,
+            description,
+            author: author || 'Anônimo',
+            imageUrl: uploadResult.url
+          })
+        });
+
+        if (!postResponse.ok) throw new Error('Erro ao criar post');
+
+        postForm.reset();
+        previewImg.src = "https://placehold.co/64x64/png?text=Image+Icon";
+        // Redireciona para a página principal após criar
+        window.location.href = "/menu.html";
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao criar post. Tente novamente.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Publicar <i class="fas fa-paper-plane"></i>';
+      }
+    }
+  </script>
+</body>
+</html>
