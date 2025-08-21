@@ -5,32 +5,64 @@ body{
 header {
     display: flex;
     justify-content: space-between;
-    background-color: #161c3de7;
-    color: white;
+    align-items: center;
+    color: rgb(0, 0, 0);
     margin-bottom: 0px;
     padding: 1rem;
     border-radius: 1rem;
 }
 
-#entrar {
-    margin-right: 0.5rem;
+#right-side {
+    display: flex; /* Alinha o menu e o container de login um ao lado do outro */
+    align-items: center;
+    gap: 2rem; /* Adiciona espaço entre o menu e os botões de login */
+}
+
+#login {
     display: flex;
-    gap: 2rem;
+    align-items: center;
+    gap: 1rem;
 }
 
-#entrar li {
-    list-style: none;
-}
-
-#entrar a {
-    text-decoration: none;
+#entrar {
+    background-color: black;
     color: white;
-    font-family: "Open Sans", sans-serif;
-    opacity: 0.7;
-    position: relative;
-    transition: opacity 0.2s ease; /* Adiciona transição suave */
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    width: 5rem;
+    text-align: center;
 }
 
+#criar {
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(0, 0, 0);
+    border: #700505 solid 2px;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    width: 7rem;
+    text-align: center;
+}
+#entrar:hover {
+    cursor: pointer;
+    opacity: 0.9;
+    width: 5rem;
+    transition: 0.7s;
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(0, 0, 0);
+    border: #700505 solid 2px;
+    border-radius: 2rem;
+}
+#criar:hover {
+    cursor: pointer;
+    opacity: 0.9;
+    width: 7rem;
+    transition: 0.7s;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+}
 
 #menu nav {
     margin-left: 0.5rem;
@@ -42,20 +74,21 @@ header {
     list-style: none;
 }
 
-#menu a, #entrar a {
+#menu a {
     text-decoration: none;
-    color: white;
+    color: rgb(0, 0, 0);
     font-family: "Open Sans", sans-serif;
     opacity: 0.7;
-    position: relative; /* Adicionado */
     transition: opacity 0.2s ease;
 }
 
-#menu a:hover, #entrar a:hover{
+#menu a:hover, a:hover {
+    color: #700505;
     transition: 0.2s;
     opacity: 1;
 }
-.nav-link.active{
+
+.nav-link.active {
     opacity: 1 !important;
 }
 
@@ -68,6 +101,11 @@ header {
     height: 2px;
     background-color: rgb(209, 195, 0);
     animation: underline 0.3s ease;
+}
+
+img {
+    width: 8%;
+    height: 8%;
 }
 
 @keyframes underline {

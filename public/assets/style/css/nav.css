@@ -1,21 +1,21 @@
 body {
-    margin: 1;
+    margin: 0; /* Alterado de 1 para 0 para evitar espaçamento indesejado */
 }
 
 header {
     display: flex;
     justify-content: space-between;
-    background-color: #161c3de7;
+    background-color: #161c3d00;
     color: white;
-    margin-bottom: 0px;
+    margin: auto; /* Permite que o cabeçalho seja centralizado horizontalmente */
     padding: 1rem;
     border-radius: 1rem;
-    width: 58vw;
-    height: 5vh;
-    margin: auto;
+    width: 100%; /* Alterado para ocupar a largura total da tela */
+    /* Removido: height: 5vh; */
     margin-top: 10px;
 }
 
+/* O restante do seu código CSS está correto e não precisa de alteração */
 #entrar {
     margin-right: 0.5rem;
     display: flex;
@@ -35,10 +35,11 @@ header {
 }
 
 #menu nav {
+    text-align: center;
     margin-left: 0.5rem;
     display: flex;
-    margin-top: 0.5rem;
     gap: 2rem;
+    padding: 1;
 }
 
 #menu ul {

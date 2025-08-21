@@ -6,10 +6,9 @@ function loadHeader() {
             <nav>
                 <ul>
                     <li><a href="menu.html" class="nav-link">Menu</a></li>
-                    <li><a href="doacoes.html" class="nav-link">Doações</a></li>
-                    <li><a href="suporte.html" class="nav-link">Suporte</a></li>
-                    <li><a href="sobre.html" class="nav-link">Sobre</a></li>
-                    <li><a href="publi.html" class="nav-link">Publicar</a></li>
+                    <li><a href="doacao2.html" class="nav-link">Doações</a></li>
+                    <li><a href="suporte2.html" class="nav-link">Suporte</a></li>
+                    <li><a href="sobre2.html" class="nav-link">Sobre</a></li>
                 </ul>
             </nav>
         </div>

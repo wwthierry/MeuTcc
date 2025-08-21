@@ -1,158 +1,146 @@
-body {
+/* Reset básico e estilos do corpo */
+* {
+    box-sizing: border-box;
+}
+
+body{
     margin: 0;
-    min-height: 100vh;
-    background: linear-gradient(to bottom, black 0%, #00098b 100%);
-    display: flex;
+    padding: 0;
+    background-color: #0a0a1f;
+    background-repeat: no-repeat;
+    display: flex; /* Centraliza o conteúdo vertical e horizontalmente */
     flex-direction: column;
     align-items: center;
-    padding: 24px;
-    font-family: Arial, sans-serif;
+    justify-content: center; /* Centraliza o conteúdo na vertical */
+    font-family: system-ui, sans-serif;
+    color: #e5e7eb; /* Cor do texto geral */
 }
 
-/* Secondary Navigation */
-.secondary-nav-container {
-  max-width: 800px;
-  margin: 32px auto 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: space-between;
-  align-items: center;
+/* Container do formulário */
+.upload-section {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
+    width: 40vw;
+    background-color: rgba(24, 24, 40, 0.97); /* Cor de fundo da referência */
+    border-radius: 16px; /* Arredondamento da referência */
+    padding: 32px 18px 28px 18px; /* Espaçamento interno da referência */
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16); /* Sombra da referência */
+    border: 1px solid #272743; /* Borda da referência */
+    gap: 2.5rem; /* Espaçamento entre os elementos da referência */
+    justify-content: center;
 }
 
-.secondary-nav {
-  display: flex;
-  justify-content: space-between;
-  background-color: #4b5563;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-grow: 1;
-  max-width: 800px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.secondary-nav-link {
-  display: block;
-  text-align: center;
-  padding: 8px 24px;
-  color: white;
-  text-decoration: none;
-  flex: 1;
-  transition: background-color 0.3s;
-}
-
-.secondary-nav-link:hover {
-  background-color: #374151;
-  border-radius: 4px;
-}
-
-.secondary-nav-link.active {
-  border-bottom: 3px solid #facc15;
-  border-radius: 10px;
-}
-
+/* Layout do formulário */
 form {
     display: flex;
     flex-wrap: wrap;
-    max-width: 960px;
+    gap: 10rem;
+    align-items: flex-start;
+    justify-content: center;
     width: 100%;
-    gap: 32px;
-    margin-bottom: 10rem;
-    overflow-y: hidden;
 }
 
+/* Estilo para a área de upload de arquivo */
 label.upload {
-    background-color: rgba(128, 128, 128, 0.7);
-    width: 384px;
-    height: 192px;
-    border-radius: 6px;
+    width: 12rem;
+    height: 12rem;
+    background-color: rgba(107, 114, 128, 0.6);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
-    position: relative;
-    overflow: hidden;
+    border-radius: 1rem;
+    flex-shrink: 0;
+    transition: border-color 0.18s;
 }
 
 label.upload img {
-    opacity: 0.5;
-    max-width: 150px;
-    max-height: 120px;
+    width: 11rem; /* Tamanho do ícone da referência */
+    height: 11rem; /* Tamanho do ícone da referência */
+    opacity: 0.8;
+    border-radius: 0.8rem;
 }
 
-label.upload .preview {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-}
 
 input[type="file"] {
     display: none;
 }
 
+/* Estilos para os inputs de texto e textarea */
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 19rem;
+    min-width: 16rem;
+    max-width: 21rem;
+}
+
 input[type="text"],
 textarea {
-    background-color: rgba(128, 128, 128, 0.7);
+    background-color: rgba(107, 114, 128, 0.6);
+    color: #e5e7eb;
     border: none;
-    border-radius: 6px;
-    color: #ccc;
-    padding: 12px 16px;
-    font-size: 16px;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: background .18s;
 }
 
 input::placeholder,
 textarea::placeholder {
-    color: #999;
+    color: #bdbdbd;
+    opacity: 0.98;
 }
 
 textarea {
     resize: none;
-    height: 120px;
+    height: 5.5rem;
 }
 
-.form-right {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
+/* Container para o botão de envio */
 .btn-submit-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center; /* Alterado para centralizar o botão */
+    margin-left: 5rem;
+    margin-top: 0.5rem; /* Espaço acima do botão */
+    width: 100%; /* Garante que o contêiner ocupa a largura total para centralização */
 }
 
-button.submit {
-    background-color: white;
-    color: black;
+/* Estilo para o botão de envio */
+button {
+    background-color: #fff;
+    color: #000;
     border: none;
-    padding: 8px 24px;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 0.375rem;
+    padding: 0.28rem 1.15rem;
+    font-size: 1.09rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
+    gap: 0.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 10px #0002;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 
-@media (max-width: 768px) {
+/* Mídia Query para telas menores (mantida e ajustada da referência) */
+@media (max-width: 480px) {
     form {
         flex-direction: column;
-        gap: 24px;
+        align-items: center;
     }
-
-    label.upload {
+    .inputs-container {
         width: 100%;
-        height: 160px;
+        max-width: 18rem;
     }
+    label.upload {
+        width: 11.5rem;
+        height: 11.5rem;
+        margin-bottom: 1rem;
+    }
+    /* Removido `align-self: center` do botão aqui, pois o contêiner já o centraliza */
 }

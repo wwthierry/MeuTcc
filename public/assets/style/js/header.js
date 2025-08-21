@@ -2,22 +2,25 @@
 function loadHeader() {
     const headerHTML = `
     <header>
-        <div id="menu">
-            <nav>
-                <li><a href="sobre.html" class="nav-link">Sobre</a></li>
-                <li><a href="suporte.html" class="nav-link">Suporte</a></li>
-            </nav>
-        </div>
-
-        <div id="entrar">
-            <li><a href="login.html" class="nav-link">Login</a></li>
-            <li><a href="criar.html" class="nav-link">Criar Conta</a></li>
+        <img src="assets/img/logo2.png" alt="Logo">
+        <div id="right-side">
+            <div id="menu">
+                <nav>
+                    <li><a href="sobre.html" class="nav-link">Sobre</a></li>
+                    <li><a href="suporte.html" class="nav-link">Suporte</a></li>
+                </nav>
+            </div>
+            <div id="login">
+                <button id="entrar">Login</button>
+                <button id="criar">Criar conta</button>
+            </div>
         </div>
     </header>
     `;
     
     document.body.insertAdjacentHTML('afterbegin', headerHTML);
     
+    // O resto do seu código de JavaScript para ativar os links...
     const navLinks = document.querySelectorAll('.nav-link');
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     
