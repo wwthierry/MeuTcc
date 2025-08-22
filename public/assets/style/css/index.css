@@ -1,41 +1,80 @@
 body{
     margin: 0;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 10px;
+  }
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height:85vh;
 }
 
-main{
-    height:80vh ;
-    background: linear-gradient(180deg, #ffffff, rgba(255, 255, 255, 0.247) 80%), 
-    url("https://correiodeitapetininga.com.br/wp-content/uploads/2021/10/IMG_1349-scaled.jpg");
-    background-size: cover; /* ou contain, dependendo do efeito desejado */
-    background-repeat: no-repeat;
-}
-#degrade{
-    margin-top: 0px;
-    width: 100vw;
-    height: 100vh;
+#escola{
+    width: 46vw;
+    height: auto;
+    float: right;
 }
 
-h1{
+#text-main{
+    color: rgb(102, 2, 2);
     font-family: "Open Sans", sans-serif;
     font-size: 2rem;
-    margin-top: 0vw;
+    margin-left: 2em;
+}
+#text-sub{
+    color: rgb(102, 2, 2);
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.5rem;
+    margin-left: 2.5em;
+    margin-top: -0.5em;
 }
 
 #sobre{
-    margin-top: -180px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
     background-color: rgb(78, 1, 1);
+    height: 60vh;
 }
 
-h2{
-    text-align: center;
+#title{
     color: white;
     font-family: "Open Sans", sans-serif;
     font-size: 2rem;
-    margin-top: 20px;
+    text-align: center;
+    margin-top: 2em;
 }
 
-#text{
-    text-align: center;
+#desc{
+    color: white;
     font-family: "Open Sans", sans-serif;
-    color: rgb(218, 218, 218);
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 2em;
+    line-height: 1.5em;
+}
+
+#icons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    margin-top: 1em;
+}
+.icon{
+    width: 4vw;
+    height: auto;
 }
